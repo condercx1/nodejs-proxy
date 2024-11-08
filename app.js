@@ -1,3 +1,4 @@
+const http = require('http'); // 添加 HTTP 模块
 const net = require('net');
 const { WebSocket, createWebSocketStream } = require('ws');
 const { TextDecoder } = require('util');
@@ -6,6 +7,15 @@ const errcb = (...args) => console.error.bind(this, ...args);
 
 const uuid = (process.env.UUID || 'd342d11e-d424-4583-b36e-524ab1f0afa4').replace(/-/g, "");
 const port = process.env.PORT || 3000;
+const healthPort = process.env.HEALTH_PORT || 8080; // 用于健康检查的端口
+
+// 创建健康检查的 HTTP 服务
+http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('OK');
+}).listen(healthPort, () => {
+    console.log(`Health check server listening on port ${healthPort}`);
+});
 
 const wss = new WebSocket.Server({ port }, logcb('listen:', port));
 wss.on('connection', ws => {
@@ -30,10 +40,3 @@ wss.on('connection', ws => {
         }).on('error', errcb('Conn-Err:', { host, port }));
     }).on('error', errcb('EE:'));
 });
-
-const http = require('http');
-
-http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('OK');
-}).listen(8080); // 用于健康检查的端口
