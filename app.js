@@ -6,7 +6,7 @@ const logcb = (...args) => console.log.bind(this, ...args);
 const errcb = (...args) => console.error.bind(this, ...args);
 
 const uuid = (process.env.UUID || 'd342d11e-d424-4583-b36e-524ab1f0afa4').replace(/-/g, "");
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 80;
 const healthPort = process.env.HEALTH_PORT || 3000; // 用于健康检查的端口
 
 // 创建健康检查的 HTTP 服务
