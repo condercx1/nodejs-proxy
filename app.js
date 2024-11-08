@@ -7,7 +7,8 @@ const errcb = (...args) => console.error.bind(this, ...args);
 const uuid = (process.env.UUID || 'd342d11e-d424-4583-b36e-524ab1f0afa4').replace(/-/g, "");
 const port = process.env.PORT || 3000;
 
-const wss = new WebSocket.Server({ port }, logcb('listen:', port));
+// const wss = new WebSocket.Server({ port }, logcb('listen:', port));
+const wss = new WebSocket.Server({ port: port, host: '0.0.0.0' }, logcb('listen:', port));
 wss.on('connection', ws => {
     console.log("on connection")
     ws.once('message', msg => {
